@@ -14,8 +14,8 @@ const multer = require("multer");
 const fs = require("fs");
 const PORT = process.env.PORT || 4000;
 
-api.use(bodyParser.json());
-api.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 require("dotenv").config();
 const app = express();
@@ -34,7 +34,8 @@ app.use((err, req, res, next) => {
 
 app.use(
   cors({
-    origin: "https://645b9ec77c4aeb14a42a4d5a--golden-dasik-8ab4f6.netlify.app",
+    origin:
+      "https://645bcfe63357cb24159c22a2--lustrous-ganache-0aae47.netlify.app",
     credentials: true,
   })
 );
