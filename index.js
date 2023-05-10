@@ -112,8 +112,12 @@ app.post("/upload-by-link", async (req, res) => {
   const { link } = req.body;
   console.log(link);
   const newName = "photo" + Date.now() + ".jpg";
+  // await imageDownloader.image({
+  //   url: link,
+  //   dest: __dirname + "/uploads/" + newName,
+  // });
   await imageDownloader.image({
-    url: link,
+    url: "https://" + link,
     dest: __dirname + "/uploads/" + newName,
   });
   res.json(newName);
