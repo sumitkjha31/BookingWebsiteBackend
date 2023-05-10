@@ -7,11 +7,15 @@ const User = require("./models/User.js");
 const Place = require("./models/Place.js");
 const Booking = require("./models/Booking.js");
 const cookieParser = require("cookie-parser");
+const bodyParser = require("body-parser");
 const url = require("url");
 const imageDownloader = require("image-downloader");
 const multer = require("multer");
 const fs = require("fs");
 const PORT = process.env.PORT || 4000;
+
+api.use(bodyParser.json());
+api.use(bodyParser.urlencoded({ extended: true }));
 
 require("dotenv").config();
 const app = express();
