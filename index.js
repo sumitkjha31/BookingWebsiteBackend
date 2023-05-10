@@ -26,11 +26,7 @@ app.use(
   cors({
     origin:
       "https://645b19b850f99f71e3d62269--jade-starship-3f9059.netlify.app",
-    headers: {
-      "Access-Control-Allow-Origin":
-        "https://645b19b850f99f71e3d62269--jade-starship-3f9059.netlify.app", // incorrect
-      "Access-Control-Allow-Credentials": true, // incorrect
-    },
+    credentials: true,
   })
 );
 mongoose.connect(process.env.MONGO_URL);
