@@ -109,7 +109,7 @@ app.post("/logout", (req, res) => {
 });
 
 app.post("/upload-by-link", async (req, res) => {
-  const { link } = req.body;
+  let { link } = req.body;
   console.log(link);
   let protocolUsed = link.substring(0, 5);
   if (protocolUsed !== "https") {
