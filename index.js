@@ -22,47 +22,17 @@ app.use(express.json());
 app.use(cookieParser());
 app.use("/uploads", express.static(__dirname + "/uploads"));
 
-// app.use(
-//   cors({
-//     credentials: true,
-//     origin:
-//       "*",
-//   })
-// );
-app.use(cors());
-
-// app.use(
-//   cors({
-//     origin:
-//       "https://645b1055c3f38169ada4c61b--symphonious-crumble-031060.netlify.app",
-//     headers: ["Content-Type"],
-//     credentials: true,
-//   })
-// );
-// Add headers before the routes are defined
-app.use(function (req, res, next) {
-  // Website you wish to allow to connect
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:8888");
-
-  // Request methods you wish to allow
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
-  );
-
-  // Request headers you wish to allow
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "X-Requested-With,content-type"
-  );
-
-  // Set to true if you need the website to include cookies in the requests sent
-  // to the API (e.g. in case you use sessions)
-  res.setHeader("Access-Control-Allow-Credentials", true);
-
-  // Pass to next layer of middleware
-  next();
-});
+app.use(
+  cors({
+    origin:
+      "https://645b19b850f99f71e3d62269--jade-starship-3f9059.netlify.app/",
+    headers: {
+      "Access-Control-Allow-Origin":
+        "https://645b19b850f99f71e3d62269--jade-starship-3f9059.netlify.app/", // incorrect
+      "Access-Control-Allow-Credentials": true, // incorrect
+    },
+  })
+);
 mongoose.connect(process.env.MONGO_URL);
 
 function getUserDataFromReq(req) {
