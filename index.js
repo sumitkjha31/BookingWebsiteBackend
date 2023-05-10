@@ -22,13 +22,14 @@ app.use(express.json());
 app.use(cookieParser());
 app.use("/uploads", express.static(__dirname + "/uploads"));
 
-app.use(
-  cors({
-    credentials: true,
-    origin:
-      "https://645b1055c3f38169ada4c61b--symphonious-crumble-031060.netlify.app/",
-  })
-);
+// app.use(
+//   cors({
+//     credentials: true,
+//     origin:
+//       "https://645b1055c3f38169ada4c61b--symphonious-crumble-031060.netlify.app/",
+//   })
+// );
+app.use(cors());
 
 mongoose.connect(process.env.MONGO_URL);
 
