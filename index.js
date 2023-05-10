@@ -26,7 +26,7 @@ app.use("/uploads", express.static(__dirname + "/uploads"));
 app.use(
   cors({
     origin:
-      "https://645b60194c620b20b26cd8ba--zesty-truffle-53bc05.netlify.app",
+      "https://645b9c16ed895410ed8ba75f--singular-macaron-d2ae42.netlify.app",
     credentials: true,
   })
 );
@@ -155,6 +155,7 @@ app.post("/upload", photosMiddleware.array("photos", 100), (req, res) => {
 
 app.post("/places", (req, res) => {
   const { token } = req.cookies;
+  console.log(token);
   const {
     title,
     address,
