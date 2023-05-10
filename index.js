@@ -29,6 +29,10 @@ app.use(
     credentials: true,
   })
 );
+app.use((req, res, next) => {
+  console.log("Request received from:", req.get("origin"));
+  next();
+});
 mongoose.connect(process.env.MONGO_URL);
 
 function getUserDataFromReq(req) {
