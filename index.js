@@ -115,15 +115,8 @@ app.post("/upload-by-link", async (req, res) => {
   if (protocolUsed !== "https") {
     link = "https://" + link;
   }
-  const newName =
-    "https://bookingwebsitebackend.onrender.com" +
-    "photo" +
-    Date.now() +
-    ".jpg";
-  // await imageDownloader.image({
-  //   url: link,
-  //   dest: __dirname + "/uploads/" + newName,
-  // });
+  const newName = "photo" + Date.now() + ".jpg";
+
   await imageDownloader.image({
     url: link,
     dest: __dirname + "/uploads/" + newName,
