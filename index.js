@@ -22,29 +22,29 @@ app.use(express.json());
 app.use(cookieParser());
 app.use("/uploads", express.static(__dirname + "/uploads"));
 
-app.use(
-  cors({
-    credentials: true,
-    origin: "http://127.0.0.1:5173",
-  })
-);
 // app.use(
 //   cors({
-//     origin: "*",
 //     credentials: true,
+//     origin: "http://127.0.0.1:5173",
 //   })
 // );
+app.use(
+  cors({
+    origin: "*",
+    credentials: true,
+  })
+);
 
-// app.options("*", cors());
+app.options("*", cors());
 
-// app.use(function (req, res, next) {
-//   res.header(
-//     "Access-Control-Allow-Headers",
-//     "Origin, X-Requested-With, Content-Type, Accept"
-//   );
-//   res.header("Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, OPTIONS");
-//   next();
-// });
+app.use(function (req, res, next) {
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  res.header("Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, OPTIONS");
+  next();
+});
 
 mongoose.connect(process.env.MONGO_URL);
 
