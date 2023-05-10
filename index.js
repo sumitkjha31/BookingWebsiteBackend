@@ -26,7 +26,7 @@ app.use("/uploads", express.static(__dirname + "/uploads"));
 app.use(
   cors({
     origin:
-      "https://645b5ccfa65b9f1eb9ae1e4d--lustrous-souffle-73b5be.netlify.app",
+      "https://645b60194c620b20b26cd8ba--zesty-truffle-53bc05.netlify.app",
     credentials: true,
   })
 );
