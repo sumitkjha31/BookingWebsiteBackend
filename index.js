@@ -108,30 +108,31 @@ app.post("/logout", (req, res) => {
   res.cookie("token", "").json(true);
 });
 
-// app.post("/upload-by-link", async (req, res) => {
-//   const { link } = req.body;
-//   const newName = "photo" + Date.now() + ".jpg";
-//   await imageDownloader.image({
-//     url: link,
-//     dest: __dirname + "/uploads/" + newName,
-//   });
-//   res.json(newName);
-// });
-
 app.post("/upload-by-link", async (req, res) => {
   const { link } = req.body;
+  console.log(link);
   const newName = "photo" + Date.now() + ".jpg";
-  const parsedUrl = url.parse(link);
-  const domainName = parsedUrl.hostname;
   await imageDownloader.image({
     url: link,
     dest: __dirname + "/uploads/" + newName,
-    headers: {
-      Referer: `http://${domainName}/`,
-    },
   });
   res.json(newName);
 });
+
+// app.post("/upload-by-link", async (req, res) => {
+//   const { link } = req.body;
+//   const newName = "photo" + Date.now() + ".jpg";
+//   const parsedUrl = url.parse(link);
+//   const domainName = parsedUrl.hostname;
+//   await imageDownloader.image({
+//     url: link,
+//     dest: __dirname + "/uploads/" + newName,
+//     headers: {
+//       Referer: `http://${domainName}/`,
+//     },
+//   });
+//   res.json(newName);
+// });
 //gr
 const photosMiddleware = multer({ dest: "uploads/" });
 app.post("/upload", photosMiddleware.array("photos", 100), (req, res) => {
