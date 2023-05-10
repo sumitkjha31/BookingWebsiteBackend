@@ -111,13 +111,17 @@ app.post("/logout", (req, res) => {
 app.post("/upload-by-link", async (req, res) => {
   const { link } = req.body;
   console.log(link);
+  let protocolUsed = link.substring(0, 5);
+  if (protocolUsed !== "https") {
+    link = "https://" + link;
+  }
   const newName = "photo" + Date.now() + ".jpg";
   // await imageDownloader.image({
   //   url: link,
   //   dest: __dirname + "/uploads/" + newName,
   // });
   await imageDownloader.image({
-    url: "https://" + link,
+    url: link,
     dest: __dirname + "/uploads/" + newName,
   });
   res.json(newName);
