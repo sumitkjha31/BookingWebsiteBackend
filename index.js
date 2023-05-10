@@ -7,6 +7,7 @@ const User = require("./models/User.js");
 const Place = require("./models/Place.js");
 const Booking = require("./models/Booking.js");
 const cookieParser = require("cookie-parser");
+const url = require("url");
 const imageDownloader = require("image-downloader");
 const multer = require("multer");
 const fs = require("fs");
@@ -107,12 +108,27 @@ app.post("/logout", (req, res) => {
   res.cookie("token", "").json(true);
 });
 
+// app.post("/upload-by-link", async (req, res) => {
+//   const { link } = req.body;
+//   const newName = "photo" + Date.now() + ".jpg";
+//   await imageDownloader.image({
+//     url: link,
+//     dest: __dirname + "/uploads/" + newName,
+//   });
+//   res.json(newName);
+// });
+
 app.post("/upload-by-link", async (req, res) => {
   const { link } = req.body;
   const newName = "photo" + Date.now() + ".jpg";
+  const parsedUrl = url.parse(link);
+  const domainName = parsedUrl.hostname;
   await imageDownloader.image({
     url: link,
     dest: __dirname + "/uploads/" + newName,
+    headers: {
+      Referer: `http://${domainName}/`,
+    },
   });
   res.json(newName);
 });
