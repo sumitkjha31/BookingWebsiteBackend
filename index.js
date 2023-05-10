@@ -22,6 +22,11 @@ const jwtSecret = "fasefraw4r5r3wq45wdfgw34twdfg";
 app.use(express.json());
 app.use(cookieParser());
 app.use("/uploads", express.static(__dirname + "/uploads"));
+// Import the error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send("Internal server error");
+});
 
 app.use(
   cors({
@@ -152,23 +157,27 @@ app.post("/upload", photosMiddleware.array("photos", 100), (req, res) => {
   res.json(uploadedFiles);
 });
 
-app.post("/places", (req, res) => {
-  const { token } = req.cookies;
-  console.log(token);
-  const {
-    title,
-    address,
-    addedPhotos,
-    description,
-    price,
-    perks,
-    extraInfo,
-    checkIn,
-    checkOut,
-    maxGuests,
-  } = req.body;
-  jwt.verify(token, jwtSecret, {}, async (err, userData) => {
-    if (err) throw err;
+// Add your routes here
+app.post("/places", async (req, res, next) => {
+  try {
+    const { token } = req.cookies;
+    console.log(token);
+    const {
+      title,
+      address,
+      addedPhotos,
+      description,
+      price,
+      perks,
+      extraInfo,
+      checkIn,
+      checkOut,
+      maxGuests,
+    } = req.body;
+    const userData = jwt.verify(token, jwtSecret);
+    if (!userData || !userData.id) {
+      throw new Error("Invalid token");
+    }
     const placeDoc = await Place.create({
       owner: userData.id,
       price,
@@ -183,7 +192,9 @@ app.post("/places", (req, res) => {
       maxGuests,
     });
     res.json(placeDoc);
-  });
+  } catch (err) {
+    next(err);
+  }
 });
 
 app.get("/user-places", (req, res) => {
