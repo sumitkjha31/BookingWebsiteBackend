@@ -26,10 +26,19 @@ app.use("/uploads", express.static(__dirname + "/uploads"));
 //   cors({
 //     credentials: true,
 //     origin:
-//       "https://645b1055c3f38169ada4c61b--symphonious-crumble-031060.netlify.app/",
+//       "https://645b1055c3f38169ada4c61b--symphonious-crumble-031060.netlify.app",
 //   })
 // );
-app.use(cors());
+// app.use(cors());
+
+app.use(
+  cors({
+    origin:
+      "https://645b1055c3f38169ada4c61b--symphonious-crumble-031060.netlify.app",
+    headers: ["Content-Type"],
+    credentials: true,
+  })
+);
 
 mongoose.connect(process.env.MONGO_URL);
 
