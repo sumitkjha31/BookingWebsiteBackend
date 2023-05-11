@@ -34,14 +34,14 @@ app.use((err, req, res, next) => {
 app.use(
   cors({
     origin:
-      "https://645c7f8e202164547debdff3--mellow-beijinho-99886f.netlify.app",
+      "https://645c92b1a8bbbe5e727ee1e9--chipper-starship-97b506.netlify.app",
     credentials: true,
   })
 );
 app.use((req, res, next) => {
   res.setHeader(
     "Access-Control-Allow-Origin",
-    "https://645c7f8e202164547debdff3--mellow-beijinho-99886f.netlify.app"
+    "https://645c92b1a8bbbe5e727ee1e9--chipper-starship-97b506.netlify.app"
   );
   res.setHeader("Access-Control-Allow-Credentials", "true");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
@@ -112,7 +112,7 @@ app.post("/login", async (req, res) => {
 
 app.get("/profile", (req, res) => {
   const token = req.cookies.token;
-  console.log(req.cookie);
+
   console.log(req.cookies);
   console.log(req.body);
   if (token) {
