@@ -256,18 +256,18 @@ app.post("/upload-by-link", async (req, res) => {
     link = "https://" + link;
   }
   const newName = "photo" + Date.now() + ".jpg";
-
+  const destination = __dirname + "/uploads/" + newName;
   // Download the image from the link
   await imageDownloader.image({
     url: link,
-    dest: newName,
+    dest: destination,
   });
 
   // Open a read stream for the downloaded image
-  const readStream = fs.createReadStream(newName);
+  const readStream = fs.createReadStream(destination);
 
   // Upload the image to the database using the GridFSBucket instance
-  const uploadStream = bucket.openUploadStream(newName);
+  const uploadStream = bucket.openUploadStream(destination);
   readStream.pipe(uploadStream);
 
   uploadStream.on("finish", async () => {
@@ -287,7 +287,6 @@ app.post("/upload-by-link", async (req, res) => {
     await file.save();
 
     // Delete the downloaded file from the local filesystem
-    fs.unlinkSync(newName);
 
     res.json(file);
   });
