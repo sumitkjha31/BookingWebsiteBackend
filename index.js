@@ -113,13 +113,10 @@ app.post("/login", async (req, res) => {
 });
 
 app.get("/profile", (req, res) => {
-  const authHeader = req.headers["authorization"];
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InN1bWl0QG1haWwuY29tIiwiaWQiOiI2NDVhNDQ3YmIwNGY2MTRlODI2ODRmMGIiLCJpYXQiOjE2ODM3Nzg1MDl9.qCo7yjkD7wPxHNyqRsCAuOdYWoN0AiAmPgmGeTCxMy0";
-  console.log("token /profile", token);
-  console.log(authHeader);
-  console.log(req);
-  // const token = req.cookies.token;
+  const token = req.cookies.token;
+  console.log(req.cookie);
+  console.log(req.cookies);
+  console.log(req.body);
   if (token) {
     jwt.verify(token, jwtSecret, {}, async (err, userData) => {
       if (err) throw err;
