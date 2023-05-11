@@ -99,9 +99,7 @@ app.post("/login", async (req, res) => {
         (err, token) => {
           if (err) throw err;
           console.log("token /login", token);
-          res
-            .cookie("token", token, { httpOnly: false, secure: true })
-            .json({ userDoc, token });
+          res.json({ userDoc, token });
         }
       );
     } else {
