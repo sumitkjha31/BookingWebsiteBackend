@@ -56,7 +56,10 @@ app.use((req, res, next) => {
 
 function getUserDataFromReq(req) {
   return new Promise((resolve, reject) => {
-    jwt.verify(req.cookies.token, jwtSecret, {}, async (err, userData) => {
+    const authHeader = req.headers["authorization"];
+    const token = authHeader && authHeader.split(" ")[1];
+
+    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
       if (err) throw err;
       resolve(userData);
     });
@@ -113,8 +116,7 @@ app.post("/login", async (req, res) => {
 app.get("/profile", (req, res) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
-  console.log(req.cookies);
-  console.log(req.body);
+
   if (token) {
     jwt.verify(token, jwtSecret, {}, async (err, userData) => {
       if (err) throw err;
@@ -178,7 +180,9 @@ app.post("/upload", photosMiddleware.array("photos", 100), (req, res) => {
 // Add your routes here
 app.post("/places", async (req, res, next) => {
   try {
-    const { token } = req.cookies;
+    const authHeader = req.headers["authorization"];
+    const token = authHeader && authHeader.split(" ")[1];
+
     console.log("token", token);
     const {
       title,
@@ -216,7 +220,9 @@ app.post("/places", async (req, res, next) => {
 });
 
 app.get("/user-places", (req, res) => {
-  const { token } = req.cookies;
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+
   jwt.verify(token, jwtSecret, {}, async (err, userData) => {
     const { id } = userData;
     res.json(await Place.find({ owner: id }));
@@ -229,7 +235,9 @@ app.get("/places/:id", async (req, res) => {
 });
 
 app.put("/places", async (req, res) => {
-  const { token } = req.cookies;
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+
   const {
     id,
     title,
