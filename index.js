@@ -107,6 +107,7 @@ app.get("/profile", (req, res) => {
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InN1bWl0QG1haWwuY29tIiwiaWQiOiI2NDVhNDQ3YmIwNGY2MTRlODI2ODRmMGIiLCJpYXQiOjE2ODM3Nzg1MDl9.qCo7yjkD7wPxHNyqRsCAuOdYWoN0AiAmPgmGeTCxMy0";
   console.log("token /profile", token);
   console.log(authHeader);
+  console.log(req);
   // const token = req.cookies.token;
   if (token) {
     jwt.verify(token, jwtSecret, {}, async (err, userData) => {
