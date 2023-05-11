@@ -114,14 +114,14 @@ app.use((err, req, res, next) => {
 app.use(
   cors({
     origin:
-      "https://645cb159fee4d57bd4bbf13e--gleaming-biscotti-695227.netlify.app",
+      "https://645d28f7078bd41415186a7e--cosmic-nougat-1c7437.netlify.app",
     credentials: true,
   })
 );
 app.use((req, res, next) => {
   res.setHeader(
     "Access-Control-Allow-Origin",
-    "https://645cb159fee4d57bd4bbf13e--gleaming-biscotti-695227.netlify.app"
+    "https://645d28f7078bd41415186a7e--cosmic-nougat-1c7437.netlify.app"
   );
   res.setHeader("Access-Control-Allow-Credentials", "true");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
@@ -307,7 +307,7 @@ app.post("/upload-by-link", async (req, res) => {
 //   res.json(newName);
 // });
 //gr
-// const photosMiddleware = multer({ dest: "uploads/" });
+const photosMiddleware = multer({ dest: "uploads/" });
 // app.post("/upload", photosMiddleware.array("photos", 100), (req, res) => {
 //   const uploadedFiles = [];
 //   for (let i = 0; i < req.files.length; i++) {
