@@ -88,7 +88,7 @@ app.post("/login", async (req, res) => {
         (err, token) => {
           if (err) throw err;
           console.log("token /login", token);
-          res.cookie("token", token).json({ token, userDoc });
+          res.cookie("token", token).json({ token, ...userDoc });
         }
       );
     } else {
