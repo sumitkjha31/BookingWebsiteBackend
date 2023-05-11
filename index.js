@@ -34,14 +34,14 @@ app.use((err, req, res, next) => {
 app.use(
   cors({
     origin:
-      "https://645c606acd50eb304837dbe4--creative-dolphin-021dce.netlify.app",
+      "https://645c7f8e202164547debdff3--mellow-beijinho-99886f.netlify.app",
     credentials: true,
   })
 );
 app.use((req, res, next) => {
   res.setHeader(
     "Access-Control-Allow-Origin",
-    "https://645c606acd50eb304837dbe4--creative-dolphin-021dce.netlify.app"
+    "https://645c7f8e202164547debdff3--mellow-beijinho-99886f.netlify.app"
   );
   res.setHeader("Access-Control-Allow-Credentials", "true");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
