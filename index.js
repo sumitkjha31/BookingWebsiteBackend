@@ -88,7 +88,7 @@ app.post("/login", async (req, res) => {
         (err, token) => {
           if (err) throw err;
           console.log("token /login", token);
-          res.cookie("token", token).json(userDoc);
+          res.cookie("token", token).json({ token, userDoc });
         }
       );
     } else {
@@ -100,7 +100,8 @@ app.post("/login", async (req, res) => {
 });
 
 app.get("/profile", (req, res) => {
-  const { token } = req.cookies;
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
   console.log("token /profile", token);
   if (token) {
     jwt.verify(token, jwtSecret, {}, async (err, userData) => {
