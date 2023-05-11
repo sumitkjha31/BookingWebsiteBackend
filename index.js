@@ -33,7 +33,7 @@ app.use((err, req, res, next) => {
 app.use(
   cors({
     origin:
-      "https://645bcfe63357cb24159c22a2--lustrous-ganache-0aae47.netlify.app",
+      "https://645c606acd50eb304837dbe4--creative-dolphin-021dce.netlify.app",
     credentials: true,
   })
 );
