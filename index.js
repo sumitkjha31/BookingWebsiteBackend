@@ -70,7 +70,7 @@ app.post("/register", async (req, res) => {
     res.status(422).json(e);
   }
 });
-// hw
+
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
   console.log(email);
