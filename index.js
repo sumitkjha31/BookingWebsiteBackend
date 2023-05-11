@@ -23,6 +23,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
+mongoose.connect(process.env.MONGO_URL);
 app.use("/uploads", express.static(__dirname + "/uploads"));
 // Import the error handling middleware
 app.use((err, req, res, next) => {
@@ -38,10 +39,20 @@ app.use(
   })
 );
 app.use((req, res, next) => {
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://645c606acd50eb304837dbe4--creative-dolphin-021dce.netlify.app"
+  );
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  next();
+});
+
+app.use((req, res, next) => {
   console.log("Request received from:", req.get("origin"));
   next();
 });
-mongoose.connect(process.env.MONGO_URL);
 
 function getUserDataFromReq(req) {
   return new Promise((resolve, reject) => {
