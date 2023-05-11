@@ -87,7 +87,7 @@ app.post("/login", async (req, res) => {
         {},
         (err, token) => {
           if (err) throw err;
-          console.log("token", token);
+          console.log("token /login", token);
           res.cookie("token", token).json(userDoc);
         }
       );
@@ -101,6 +101,7 @@ app.post("/login", async (req, res) => {
 
 app.get("/profile", (req, res) => {
   const { token } = req.cookies;
+  console.log("token /profile", token);
   if (token) {
     jwt.verify(token, jwtSecret, {}, async (err, userData) => {
       if (err) throw err;
