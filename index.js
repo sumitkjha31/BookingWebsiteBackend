@@ -34,14 +34,14 @@ app.use((err, req, res, next) => {
 app.use(
   cors({
     origin:
-      "https://645c92b1a8bbbe5e727ee1e9--chipper-starship-97b506.netlify.app",
+      "https://645cb159fee4d57bd4bbf13e--gleaming-biscotti-695227.netlify.app",
     credentials: true,
   })
 );
 app.use((req, res, next) => {
   res.setHeader(
     "Access-Control-Allow-Origin",
-    "https://645c92b1a8bbbe5e727ee1e9--chipper-starship-97b506.netlify.app"
+    "https://645cb159fee4d57bd4bbf13e--gleaming-biscotti-695227.netlify.app"
   );
   res.setHeader("Access-Control-Allow-Credentials", "true");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
@@ -99,7 +99,7 @@ app.post("/login", async (req, res) => {
         (err, token) => {
           if (err) throw err;
           console.log("token /login", token);
-          res.json({ userDoc, token });
+          res.json({ token, userDoc });
         }
       );
     } else {
@@ -111,8 +111,8 @@ app.post("/login", async (req, res) => {
 });
 
 app.get("/profile", (req, res) => {
-  const token = req.cookies.token;
-
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
   console.log(req.cookies);
   console.log(req.body);
   if (token) {
