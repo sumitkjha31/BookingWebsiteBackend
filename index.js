@@ -19,8 +19,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
-const { MongoClient, GridFSBucket } = require("mongodb");
-const dbName = "BookingApp";
+const cloudinary = require("cloudinary").v2;
+// Configuration
+cloudinary.config({
+  cloud_name: "dpmqtgwfu",
+  api_key: "668149654818296",
+  api_secret: "vjuT4Aq3igimg0BUdUvB1T_Dvdo",
+});
 
 mongoose.connect(process.env.MONGO_URL, {
   useNewUrlParser: true,
@@ -128,15 +133,14 @@ app.use((err, req, res, next) => {
 
 app.use(
   cors({
-    origin:
-      "https://645df1f251e0f5630aa8f1e6--glittery-bubblegum-aa4ee1.netlify.app",
+    origin: "hhttps://645e11d751e0f57c91a8f205--lucky-melba-2f4ed8.netlify.app",
     credentials: true,
   })
 );
 app.use((req, res, next) => {
   res.setHeader(
     "Access-Control-Allow-Origin",
-    "https://645df1f251e0f5630aa8f1e6--glittery-bubblegum-aa4ee1.netlify.app"
+    "https://645e11d751e0f57c91a8f205--lucky-melba-2f4ed8.netlify.app"
   );
   res.setHeader("Access-Control-Allow-Credentials", "true");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
@@ -229,19 +233,44 @@ app.post("/logout", (req, res) => {
 
 app.post("/upload-by-link", async (req, res) => {
   let { link } = req.body;
-  console.log(link);
+
   let protocolUsed = link.substring(0, 5);
   if (protocolUsed !== "https") {
     link = "https://" + link;
   }
-  const newName = "photo" + Date.now() + ".jpg";
 
-  await imageDownloader.image({
+  const options = {
     url: link,
-    dest: __dirname + "/uploads/" + newName,
-  });
-  res.json(newName);
+    dest: __dirname + "/uploads/photo.jpg",
+  };
+
+  try {
+    const { filename } = await imageDownloader.image(options);
+
+    const result = await cloudinary.uploader.upload(filename);
+    const secureUrl = result.secure_url;
+
+    res.json(secureUrl);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Something went wrong");
+  }
 });
+// app.post("/upload-by-link", async (req, res) => {
+//   let { link } = req.body;
+//   console.log(link);
+//   let protocolUsed = link.substring(0, 5);
+//   if (protocolUsed !== "https") {
+//     link = "https://" + link;
+//   }
+//   const newName = "photo" + Date.now() + ".jpg";
+
+//   await imageDownloader.image({
+//     url: link,
+//     dest: __dirname + "/uploads/" + newName,
+//   });
+//   res.json(newName);
+// });
 
 // app.post("/upload-by-link", async (req, res) => {
 //   const { link } = req.body;
@@ -258,17 +287,35 @@ app.post("/upload-by-link", async (req, res) => {
 //   res.json(newName);
 // });
 //gr
-const photosMiddleware = multer({ dest: "uploads/" });
-app.post("/upload", photosMiddleware.array("photos", 100), (req, res) => {
+// const photosMiddleware = multer({ dest: "uploads/" });
+// app.post("/upload", photosMiddleware.array("photos", 100), (req, res) => {
+//   const uploadedFiles = [];
+//   for (let i = 0; i < req.files.length; i++) {
+//     const { path, originalname } = req.files[i];
+//     const parts = originalname.split(".");
+//     const ext = parts[parts.length - 1];
+//     const newPath = path + "." + ext;
+//     fs.renameSync(path, newPath);
+//     uploadedFiles.push(newPath.replace("uploads/", ""));
+//   }
+//   res.json(uploadedFiles);
+// });
+const multer = require("multer");
+
+const storage = multer.diskStorage({});
+const upload = multer({ storage });
+app.post("/upload", upload.array("photos", 100), async (req, res) => {
   const uploadedFiles = [];
+
   for (let i = 0; i < req.files.length; i++) {
-    const { path, originalname } = req.files[i];
-    const parts = originalname.split(".");
-    const ext = parts[parts.length - 1];
-    const newPath = path + "." + ext;
-    fs.renameSync(path, newPath);
-    uploadedFiles.push(newPath.replace("uploads/", ""));
+    const file = req.files[i];
+
+    const result = await cloudinary.uploader.upload(file.path);
+    uploadedFiles.push(result.secure_url);
+
+    fs.unlinkSync(file.path);
   }
+
   res.json(uploadedFiles);
 });
 // app.post("/upload-by-link", async (req, res) => {
