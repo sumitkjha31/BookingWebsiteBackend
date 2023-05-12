@@ -271,7 +271,8 @@ app.post("/upload-by-link", async (req, res) => {
       url: link,
       dest: __dirname + "/uploads/" + newName,
     });
-
+    console.log(image);
+    console.log(filename);
     // Create a read stream from the downloaded image
     const readStream = fs.createReadStream(image);
 
