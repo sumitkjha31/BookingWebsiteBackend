@@ -30,11 +30,16 @@ mongoose.connect(process.env.MONGO_URL, {
 const connection = mongoose.connection;
 // Create a GridFSBucket instance using the native MongoDB driver
 let bucket;
-connection.once("open", () => {
-  bucket = new MongoClient.GridFSBucket(connection.db, {
-    bucketName: "uploads",
+async function init() {
+  await new Promise((resolve) => {
+    connection.once("open", () => {
+      bucket = new mongoose.mongo.GridFSBucket(connection.db, {
+        bucketName: "uploads",
+      });
+      resolve();
+    });
   });
-});
+}
 
 // Define a schema for the file model
 const fileSchema = new mongoose.Schema({
@@ -273,15 +278,24 @@ app.post("/upload-by-link", async (req, res) => {
     });
     console.log(image);
     console.log(filename);
-    // Create a read stream from the downloaded image
-    const readStream = fs.createReadStream(__dirname + "/uploads/" + newName);
+    init()
+      .then(() => {
+        // use the bucket object here
+        // Create a read stream from the downloaded image
+        const readStream = fs.createReadStream(
+          __dirname + "/uploads/" + newName
+        );
 
-    // Upload the image to the database
-    const writeStream = bucket.openUploadStream(newName);
-    readStream.pipe(writeStream);
+        // Upload the image to the database
+        const writeStream = bucket.openUploadStream(newName);
+        readStream.pipe(writeStream);
 
-    // Send the filename of the saved image back to the user
-    res.json(newName);
+        // Send the filename of the saved image back to the user
+        res.json(newName);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   } catch (err) {
     console.error(err);
     res.status(500).send("Internal Server Error");
