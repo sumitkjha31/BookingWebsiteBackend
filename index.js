@@ -133,14 +133,15 @@ app.use((err, req, res, next) => {
 
 app.use(
   cors({
-    origin: "https://645e11d751e0f57c91a8f205--lucky-melba-2f4ed8.netlify.app",
+    origin:
+      "https://645e1663f532d67a4bf17875--sparkly-marigold-270a3d.netlify.app",
     credentials: true,
   })
 );
 app.use((req, res, next) => {
   res.setHeader(
     "Access-Control-Allow-Origin",
-    "https://645e11d751e0f57c91a8f205--lucky-melba-2f4ed8.netlify.app"
+    "https://645e1663f532d67a4bf17875--sparkly-marigold-270a3d.netlify.app"
   );
   res.setHeader("Access-Control-Allow-Credentials", "true");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
