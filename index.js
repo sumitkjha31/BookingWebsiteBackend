@@ -30,18 +30,22 @@ mongoose.connect(process.env.MONGO_URL, {
 const connection = mongoose.connection;
 // Create a GridFSBucket instance using the native MongoDB driver
 let bucket;
+
 async function init() {
-  console.log("-1");
-  await new Promise((resolve) => {
-    console.log("0");
-    connection.once("open", () => {
-      bucket = new mongoose.mongo.GridFSBucket(connection.db, {
-        bucketName: "uploads",
+  try {
+    console.log("-1");
+    await new Promise((resolve) => {
+      console.log("0");
+      connection.once("open", () => {
+        bucket = new mongoose.mongo.GridFSBucket(connection.db, {
+          bucketName: "uploads",
+        });
+        resolve();
       });
-      console.log("1");
-      resolve();
     });
-  });
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 // Define a schema for the file model
