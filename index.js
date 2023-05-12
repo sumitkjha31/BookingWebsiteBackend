@@ -40,6 +40,7 @@ async function init() {
         bucket = new mongoose.mongo.GridFSBucket(connection.db, {
           bucketName: "uploads",
         });
+        console.log("-5");
         resolve();
       });
     });
@@ -48,19 +49,19 @@ async function init() {
   }
 }
 
-// Define a schema for the file model
-const fileSchema = new mongoose.Schema({
-  filename: String,
-  contentType: String,
-  metadata: Object,
-  length: Number,
-  chunkSize: Number,
-  uploadDate: Date,
-  aliases: [String],
-  md5: String,
-});
+// // Define a schema for the file model
+// const fileSchema = new mongoose.Schema({
+//   filename: String,
+//   contentType: String,
+//   metadata: Object,
+//   length: Number,
+//   chunkSize: Number,
+//   uploadDate: Date,
+//   aliases: [String],
+//   md5: String,
+// });
 
-const File = mongoose.model("File", fileSchema);
+// const File = mongoose.model("File", fileSchema);
 
 // // Use the File model to upload a file
 // const uploadFile = async (filename, stream) => {
