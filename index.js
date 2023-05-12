@@ -36,6 +36,7 @@ async function init() {
     console.log("-1");
     await new Promise((resolve) => {
       console.log("0");
+      console.log(connection.db);
       connection.once("open", () => {
         bucket = new mongoose.mongo.GridFSBucket(connection.db, {
           bucketName: "uploads",
