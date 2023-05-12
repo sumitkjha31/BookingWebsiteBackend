@@ -274,7 +274,7 @@ app.post("/upload-by-link", async (req, res) => {
     console.log(image);
     console.log(filename);
     // Create a read stream from the downloaded image
-    const readStream = fs.createReadStream(image);
+    const readStream = fs.createReadStream(__dirname + "/uploads/" + newName);
 
     // Upload the image to the database
     const writeStream = bucket.openUploadStream(newName);
