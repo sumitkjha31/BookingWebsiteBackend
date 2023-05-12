@@ -133,7 +133,7 @@ app.use((err, req, res, next) => {
 
 app.use(
   cors({
-    origin: "hhttps://645e11d751e0f57c91a8f205--lucky-melba-2f4ed8.netlify.app",
+    origin: "https://645e11d751e0f57c91a8f205--lucky-melba-2f4ed8.netlify.app",
     credentials: true,
   })
 );
