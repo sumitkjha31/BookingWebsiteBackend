@@ -28,11 +28,12 @@ mongoose.connect(process.env.MONGO_URL, {
 });
 
 const connection = mongoose.connection;
-
 // Create a GridFSBucket instance using the native MongoDB driver
 let bucket;
 connection.once("open", () => {
-  bucket = new GridFSBucket(connection.db, { bucketName: "myBucket" });
+  bucket = new MongoClient.GridFSBucket(connection.db, {
+    bucketName: "uploads",
+  });
 });
 
 // Define a schema for the file model
@@ -113,15 +114,14 @@ app.use((err, req, res, next) => {
 
 app.use(
   cors({
-    origin:
-      "https://645d28f7078bd41415186a7e--cosmic-nougat-1c7437.netlify.app",
+    origin: "https://645dc9fc51e0f54ad0a8f130--glowing-wisp-120a0d.netlify.app",
     credentials: true,
   })
 );
 app.use((req, res, next) => {
   res.setHeader(
     "Access-Control-Allow-Origin",
-    "https://645d28f7078bd41415186a7e--cosmic-nougat-1c7437.netlify.app"
+    "https://645dc9fc51e0f54ad0a8f130--glowing-wisp-120a0d.netlify.app"
   );
   res.setHeader("Access-Control-Allow-Credentials", "true");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
@@ -228,69 +228,6 @@ app.post("/logout", (req, res) => {
 //   res.json(newName);
 // });
 
-app.use(fileUpload());
-// Handle file upload request
-app.post("/upload", (req, res) => {
-  if (!req.files || Object.keys(req.files).length === 0) {
-    return res.status(400).send("No files were uploaded.");
-  }
-
-  // The name of the input field (i.e. "file") is used to retrieve the uploaded file
-  const { file } = req.files;
-
-  // Use the mv() method to place the file somewhere on your server
-  file.mv(`uploads/${file.name}`, (err) => {
-    if (err) {
-      return res.status(500).send(err);
-    }
-
-    res.send("File uploaded!");
-  });
-});
-
-app.post("/upload-by-link", async (req, res) => {
-  let { link } = req.body;
-  console.log(link);
-  let protocolUsed = link.substring(0, 5);
-  if (protocolUsed !== "https") {
-    link = "https://" + link;
-  }
-  const newName = "photo" + Date.now() + ".jpg";
-  const destination = __dirname + "/uploads/" + newName;
-  // Download the image from the link
-  await imageDownloader.image({
-    url: link,
-    dest: destination,
-  });
-
-  // Open a read stream for the downloaded image
-  const readStream = fs.createReadStream(destination);
-
-  // Upload the image to the database using the GridFSBucket instance
-  const uploadStream = bucket.openUploadStream(destination);
-  readStream.pipe(uploadStream);
-
-  uploadStream.on("finish", async () => {
-    // Create a new File document using the details of the uploaded file
-    const file = new File({
-      filename: uploadStream.filename,
-      contentType: uploadStream.contentType,
-      metadata: uploadStream.metadata,
-      length: uploadStream.length,
-      chunkSize: uploadStream.chunkSize,
-      uploadDate: uploadStream.uploadDate,
-      aliases: uploadStream.aliases,
-      md5: uploadStream.md5,
-    });
-
-    // Save the File document to the database
-    await file.save();
-
-    // Delete the downloaded file from the local filesystem
-
-    res.json(file);
-  });
-});
 // app.post("/upload-by-link", async (req, res) => {
 //   const { link } = req.body;
 //   const newName = "photo" + Date.now() + ".jpg";
@@ -306,7 +243,7 @@ app.post("/upload-by-link", async (req, res) => {
 //   res.json(newName);
 // });
 //gr
-const photosMiddleware = multer({ dest: "uploads/" });
+// const photosMiddleware = multer({ dest: "uploads/" });
 // app.post("/upload", photosMiddleware.array("photos", 100), (req, res) => {
 //   const uploadedFiles = [];
 //   for (let i = 0; i < req.files.length; i++) {
@@ -319,57 +256,54 @@ const photosMiddleware = multer({ dest: "uploads/" });
 //   }
 //   res.json(uploadedFiles);
 // });
-
-app.post("/uploads", photosMiddleware.array("photos", 100), (req, res) => {
-  const uploadedFiles = [];
-  for (let i = 0; i < req.files.length; i++) {
-    const { path, originalname } = req.files[i];
-    const parts = originalname.split(".");
-    const ext = parts[parts.length - 1];
-    const newPath = path + "." + ext;
-    fs.renameSync(path, newPath);
-
-    // Open a read stream for the uploaded file
-    const readStream = fs.createReadStream(newPath);
-
-    // Upload the file to the database using the GridFSBucket instance
-    const uploadStream = bucket.openUploadStream(originalname);
-    readStream.pipe(uploadStream);
-
-    uploadedFiles.push(originalname);
-
-    uploadStream.on("finish", async () => {
-      // Create a new File document using the details of the uploaded file
-      const file = new File({
-        filename: uploadStream.filename,
-        contentType: uploadStream.contentType,
-        metadata: uploadStream.metadata,
-        length: uploadStream.length,
-        chunkSize: uploadStream.chunkSize,
-        uploadDate: uploadStream.uploadDate,
-        aliases: uploadStream.aliases,
-        md5: uploadStream.md5,
-      });
-
-      // Save the File document to the database
-      await file.save();
-
-      // Delete the uploaded file from the local filesystem
-      fs.unlinkSync(newPath);
-
-      console.log(`File ${file.filename} uploaded and saved to the database`);
-    });
+app.post("/upload-by-link", async (req, res) => {
+  let { link } = req.body;
+  console.log(link);
+  let protocolUsed = link.substring(0, 5);
+  if (protocolUsed !== "https") {
+    link = "https://" + link;
   }
+  const newName = "photo" + Date.now() + ".jpg";
 
-  res.json({ uploadedFiles });
-});
-app.get("/files", async (req, res) => {
   try {
-    const files = await File.find().lean();
-    res.json(files);
+    // Download the image from the link
+    const { filename, image } = await imageDownloader.image({
+      url: link,
+      dest: __dirname + "/uploads/" + newName,
+    });
+
+    // Create a read stream from the downloaded image
+    const readStream = fs.createReadStream(image);
+
+    // Upload the image to the database
+    const writeStream = bucket.openUploadStream(newName);
+    readStream.pipe(writeStream);
+
+    // Send the filename of the saved image back to the user
+    res.json(newName);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Server error" });
+    res.status(500).send("Internal Server Error");
+  }
+});
+// Save files from the database to the local uploads folder
+app.get("/save-to-local", async (req, res) => {
+  try {
+    const files = await bucket.find().toArray();
+
+    files.forEach(async (file) => {
+      const readStream = bucket.openDownloadStream(file._id);
+      const writeStream = fs.createWriteStream(
+        path.join(__dirname, "uploads", file.filename)
+      );
+      readStream.pipe(writeStream);
+      console.log(`File ${file.filename} saved to uploads folder`);
+    });
+
+    res.send("Files saved to uploads folder");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
   }
 });
 // Add your routes here
