@@ -300,7 +300,6 @@ app.post("/upload-by-link", async (req, res) => {
 //   }
 //   res.json(uploadedFiles);
 // });
-const multer = require("multer");
 
 const storage = multer.diskStorage({});
 const upload = multer({ storage });
