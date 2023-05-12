@@ -36,6 +36,7 @@ async function init() {
       bucket = new mongoose.mongo.GridFSBucket(connection.db, {
         bucketName: "uploads",
       });
+      console.log("1");
       resolve();
     });
   });
@@ -280,16 +281,18 @@ app.post("/upload-by-link", async (req, res) => {
     console.log(filename);
     init()
       .then(() => {
+        console.log("2");
         // use the bucket object here
         // Create a read stream from the downloaded image
         const readStream = fs.createReadStream(
           __dirname + "/uploads/" + newName
         );
-
+        console.log("3");
         // Upload the image to the database
         const writeStream = bucket.openUploadStream(newName);
+        console.log("4");
         readStream.pipe(writeStream);
-
+        console.log("5");
         // Send the filename of the saved image back to the user
         res.json(newName);
       })
