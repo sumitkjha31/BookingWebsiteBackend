@@ -27,28 +27,28 @@ mongoose.connect(process.env.MONGO_URL, {
   useUnifiedTopology: true,
 });
 
-const connection = mongoose.connection;
+// const connection = mongoose.connection;
 // Create a GridFSBucket instance using the native MongoDB driver
-let bucket;
+// let bucket;
 
-async function init() {
-  try {
-    console.log("-1");
-    await new Promise((resolve) => {
-      console.log("0");
-      console.log(connection.db);
-      connection.once("open", () => {
-        bucket = new mongoose.mongo.GridFSBucket(connection.db, {
-          bucketName: "uploads",
-        });
-        console.log("-5");
-        resolve();
-      });
-    });
-  } catch (error) {
-    console.error(error);
-  }
-}
+// async function init() {
+//   try {
+//     console.log("-1");
+//     await new Promise((resolve) => {
+//       console.log("0");
+//       console.log(connection.db);
+//       connection.once("open", () => {
+//         bucket = new mongoose.mongo.GridFSBucket(connection.db, {
+//           bucketName: "uploads",
+//         });
+//         console.log("-5");
+//         resolve();
+//       });
+//     });
+//   } catch (error) {
+//     console.error(error);
+//   }
+// }
 
 // // Define a schema for the file model
 // const fileSchema = new mongoose.Schema({
@@ -128,14 +128,15 @@ app.use((err, req, res, next) => {
 
 app.use(
   cors({
-    origin: "https://645dc9fc51e0f54ad0a8f130--glowing-wisp-120a0d.netlify.app",
+    origin:
+      "https://645dec6cac97e25ef163ad80--resplendent-crumble-b0eae0.netlify.app",
     credentials: true,
   })
 );
 app.use((req, res, next) => {
   res.setHeader(
     "Access-Control-Allow-Origin",
-    "https://645dc9fc51e0f54ad0a8f130--glowing-wisp-120a0d.netlify.app"
+    "https://645dec6cac97e25ef163ad80--resplendent-crumble-b0eae0.netlify.app"
   );
   res.setHeader("Access-Control-Allow-Credentials", "true");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
@@ -226,21 +227,21 @@ app.post("/logout", (req, res) => {
   res.cookie("token", "").json(true);
 });
 
-// app.post("/upload-by-link", async (req, res) => {
-//   let { link } = req.body;
-//   console.log(link);
-//   let protocolUsed = link.substring(0, 5);
-//   if (protocolUsed !== "https") {
-//     link = "https://" + link;
-//   }
-//   const newName = "photo" + Date.now() + ".jpg";
+app.post("/upload-by-link", async (req, res) => {
+  let { link } = req.body;
+  console.log(link);
+  let protocolUsed = link.substring(0, 5);
+  if (protocolUsed !== "https") {
+    link = "https://" + link;
+  }
+  const newName = "photo" + Date.now() + ".jpg";
 
-//   await imageDownloader.image({
-//     url: link,
-//     dest: __dirname + "/uploads/" + newName,
-//   });
-//   res.json(newName);
-// });
+  await imageDownloader.image({
+    url: link,
+    dest: __dirname + "/uploads/" + newName,
+  });
+  res.json(newName);
+});
 
 // app.post("/upload-by-link", async (req, res) => {
 //   const { link } = req.body;
@@ -257,81 +258,81 @@ app.post("/logout", (req, res) => {
 //   res.json(newName);
 // });
 //gr
-// const photosMiddleware = multer({ dest: "uploads/" });
-// app.post("/upload", photosMiddleware.array("photos", 100), (req, res) => {
-//   const uploadedFiles = [];
-//   for (let i = 0; i < req.files.length; i++) {
-//     const { path, originalname } = req.files[i];
-//     const parts = originalname.split(".");
-//     const ext = parts[parts.length - 1];
-//     const newPath = path + "." + ext;
-//     fs.renameSync(path, newPath);
-//     uploadedFiles.push(newPath.replace("uploads/", ""));
+const photosMiddleware = multer({ dest: "uploads/" });
+app.post("/upload", photosMiddleware.array("photos", 100), (req, res) => {
+  const uploadedFiles = [];
+  for (let i = 0; i < req.files.length; i++) {
+    const { path, originalname } = req.files[i];
+    const parts = originalname.split(".");
+    const ext = parts[parts.length - 1];
+    const newPath = path + "." + ext;
+    fs.renameSync(path, newPath);
+    uploadedFiles.push(newPath.replace("uploads/", ""));
+  }
+  res.json(uploadedFiles);
+});
+// app.post("/upload-by-link", async (req, res) => {
+//   let { link } = req.body;
+//   console.log(link);
+//   let protocolUsed = link.substring(0, 5);
+//   if (protocolUsed !== "https") {
+//     link = "https://" + link;
 //   }
-//   res.json(uploadedFiles);
+//   const newName = "photo" + Date.now() + ".jpg";
+
+//   try {
+//     // Download the image from the link
+//     const { filename, image } = await imageDownloader.image({
+//       url: link,
+//       dest: __dirname + "/uploads/" + newName,
+//     });
+//     console.log(image);
+//     console.log(filename);
+//     init()
+//       .then(() => {
+//         console.log("2");
+//         // use the bucket object here
+//         // Create a read stream from the downloaded image
+//         const readStream = fs.createReadStream(
+//           __dirname + "/uploads/" + newName
+//         );
+//         console.log("3");
+//         // Upload the image to the database
+//         const writeStream = bucket.openUploadStream(newName);
+//         console.log("4");
+//         readStream.pipe(writeStream);
+//         console.log("5");
+//         // Send the filename of the saved image back to the user
+//         res.json(newName);
+//       })
+//       .catch((error) => {
+//         console.error(error);
+//       });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).send("Internal Server Error");
+//   }
 // });
-app.post("/upload-by-link", async (req, res) => {
-  let { link } = req.body;
-  console.log(link);
-  let protocolUsed = link.substring(0, 5);
-  if (protocolUsed !== "https") {
-    link = "https://" + link;
-  }
-  const newName = "photo" + Date.now() + ".jpg";
+// // Save files from the database to the local uploads folder
+// app.get("/save-to-local", async (req, res) => {
+//   try {
+//     const files = await bucket.find().toArray();
 
-  try {
-    // Download the image from the link
-    const { filename, image } = await imageDownloader.image({
-      url: link,
-      dest: __dirname + "/uploads/" + newName,
-    });
-    console.log(image);
-    console.log(filename);
-    init()
-      .then(() => {
-        console.log("2");
-        // use the bucket object here
-        // Create a read stream from the downloaded image
-        const readStream = fs.createReadStream(
-          __dirname + "/uploads/" + newName
-        );
-        console.log("3");
-        // Upload the image to the database
-        const writeStream = bucket.openUploadStream(newName);
-        console.log("4");
-        readStream.pipe(writeStream);
-        console.log("5");
-        // Send the filename of the saved image back to the user
-        res.json(newName);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Internal Server Error");
-  }
-});
-// Save files from the database to the local uploads folder
-app.get("/save-to-local", async (req, res) => {
-  try {
-    const files = await bucket.find().toArray();
+//     files.forEach(async (file) => {
+//       const readStream = bucket.openDownloadStream(file._id);
+//       const writeStream = fs.createWriteStream(
+//         path.join(__dirname, "uploads", file.filename)
+//       );
+//       readStream.pipe(writeStream);
+//       console.log(`File ${file.filename} saved to uploads folder`);
+//     });
 
-    files.forEach(async (file) => {
-      const readStream = bucket.openDownloadStream(file._id);
-      const writeStream = fs.createWriteStream(
-        path.join(__dirname, "uploads", file.filename)
-      );
-      readStream.pipe(writeStream);
-      console.log(`File ${file.filename} saved to uploads folder`);
-    });
-
-    res.send("Files saved to uploads folder");
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Internal Server Error");
-  }
-});
+//     res.send("Files saved to uploads folder");
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).send("Internal Server Error");
+//   }
+// });
 // Add your routes here
 app.post("/places", async (req, res, next) => {
   try {
