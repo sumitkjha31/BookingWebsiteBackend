@@ -55,55 +55,55 @@ const fileSchema = new mongoose.Schema({
 
 const File = mongoose.model("File", fileSchema);
 
-// Use the File model to upload a file
-const uploadFile = async (filename, stream) => {
-  const uploadStream = bucket.openUploadStream(filename);
-  stream.pipe(uploadStream);
-  return new Promise((resolve, reject) => {
-    uploadStream.on("finish", () => {
-      const file = new File({
-        filename: filename,
-        contentType: uploadStream.contentType,
-        metadata: uploadStream.metadata,
-        length: uploadStream.length,
-        chunkSize: uploadStream.chunkSize,
-        uploadDate: uploadStream.uploadDate,
-        aliases: uploadStream.aliases,
-        md5: uploadStream.md5,
-      });
-      file.save((err) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(file);
-        }
-      });
-    });
-    stream.on("error", (err) => {
-      reject(err);
-    });
-    uploadStream.on("error", (err) => {
-      reject(err);
-    });
-  });
-};
+// // Use the File model to upload a file
+// const uploadFile = async (filename, stream) => {
+//   const uploadStream = bucket.openUploadStream(filename);
+//   stream.pipe(uploadStream);
+//   return new Promise((resolve, reject) => {
+//     uploadStream.on("finish", () => {
+//       const file = new File({
+//         filename: filename,
+//         contentType: uploadStream.contentType,
+//         metadata: uploadStream.metadata,
+//         length: uploadStream.length,
+//         chunkSize: uploadStream.chunkSize,
+//         uploadDate: uploadStream.uploadDate,
+//         aliases: uploadStream.aliases,
+//         md5: uploadStream.md5,
+//       });
+//       file.save((err) => {
+//         if (err) {
+//           reject(err);
+//         } else {
+//           resolve(file);
+//         }
+//       });
+//     });
+//     stream.on("error", (err) => {
+//       reject(err);
+//     });
+//     uploadStream.on("error", (err) => {
+//       reject(err);
+//     });
+//   });
+// };
 
-// Use the File model to download a file
-const downloadFile = async (id, writeStream) => {
-  const downloadStream = bucket.openDownloadStream(id);
-  downloadStream.pipe(writeStream);
-  return new Promise((resolve, reject) => {
-    downloadStream.on("end", () => {
-      resolve();
-    });
-    downloadStream.on("error", (err) => {
-      reject(err);
-    });
-    writeStream.on("error", (err) => {
-      reject(err);
-    });
-  });
-};
+// // Use the File model to download a file
+// const downloadFile = async (id, writeStream) => {
+//   const downloadStream = bucket.openDownloadStream(id);
+//   downloadStream.pipe(writeStream);
+//   return new Promise((resolve, reject) => {
+//     downloadStream.on("end", () => {
+//       resolve();
+//     });
+//     downloadStream.on("error", (err) => {
+//       reject(err);
+//     });
+//     writeStream.on("error", (err) => {
+//       reject(err);
+//     });
+//   });
+// };
 
 const PORT = process.env.PORT || 4000;
 
