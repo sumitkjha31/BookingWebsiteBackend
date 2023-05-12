@@ -31,7 +31,9 @@ const connection = mongoose.connection;
 // Create a GridFSBucket instance using the native MongoDB driver
 let bucket;
 async function init() {
+  console.log("-1");
   await new Promise((resolve) => {
+    console.log("0");
     connection.once("open", () => {
       bucket = new mongoose.mongo.GridFSBucket(connection.db, {
         bucketName: "uploads",
