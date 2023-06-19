@@ -432,7 +432,7 @@ app.post("/places", async (req, res, next) => {
 app.get("/user-places", (req, res) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
-
+  console.log(token);
   jwt.verify(token, jwtSecret, {}, async (err, userData) => {
     const { id } = userData;
     res.json(await Place.find({ owner: id }));
