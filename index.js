@@ -130,10 +130,7 @@ const jwtSecret = "fasefraw4r5r3wq45wdfgw34twdfg";
 //   verbose: true
 // }));
 
-// Catch-all route handler
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
+
 app.use("/uploads", express.static(__dirname + "/uploads"));
 // Import the error handling middleware
 app.use((err, req, res, next) => {
@@ -517,4 +514,8 @@ app.get("/bookings", async (req, res) => {
   res.json(await Booking.find({ user: userData.id }).populate("place"));
 });
 
+// Catch-all route handler
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'BookingWebsiteFrontend', 'index.html'));
+});
 app.listen(PORT);
