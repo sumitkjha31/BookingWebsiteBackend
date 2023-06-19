@@ -32,11 +32,6 @@ mongoose.connect(process.env.MONGO_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
-if(process.env.NODE_ENV === "production") {
-  app.use(express.static("client/build"));
-  app.get("/*", function(req, res) {
-      res.sendFile(path.join(__dirname, "./client/build/index.html"));
-    }); }
 
 // const connection = mongoose.connection;
 // Create a GridFSBucket instance using the native MongoDB driver
@@ -146,14 +141,14 @@ app.use((err, req, res, next) => {
 app.use(
   cors({
     origin:
-      "https://64904058deb93b514786d839--ornate-hummingbird-ddb8e2.netlify.app",
+      "https://explorehotels.onrender.com",
     credentials: true,
   })
 );
 app.use((req, res, next) => {
   res.setHeader(
     "Access-Control-Allow-Origin",
-    "https://64904058deb93b514786d839--ornate-hummingbird-ddb8e2.netlify.app"
+    "https://explorehotels.onrender.com"
   );
   res.setHeader("Access-Control-Allow-Credentials", "true");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
