@@ -141,14 +141,14 @@ app.use((err, req, res, next) => {
 app.use(
   cors({
     origin:
-      "https://6490269111e1f64a1b64faf6--radiant-torte-897f24.netlify.app",
+      "https://64904058deb93b514786d839--ornate-hummingbird-ddb8e2.netlify.app",
     credentials: true,
   })
 );
 app.use((req, res, next) => {
   res.setHeader(
     "Access-Control-Allow-Origin",
-    "https://6490269111e1f64a1b64faf6--radiant-torte-897f24.netlify.app"
+    "https://64904058deb93b514786d839--ornate-hummingbird-ddb8e2.netlify.app"
   );
   res.setHeader("Access-Control-Allow-Credentials", "true");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
