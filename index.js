@@ -9,6 +9,7 @@ const Booking = require("./models/Booking.js");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const url = require("url");
+const path = require('path');
 const imageDownloader = require("image-downloader");
 const multer = require("multer");
 const fs = require("fs");
