@@ -434,6 +434,7 @@ app.get("/user-places", (req, res) => {
   const token = authHeader && authHeader.split(" ")[1];
   console.log(token);
   jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+     console.log(userData);
     const { id } = userData;
     res.json(await Place.find({ owner: id }));
   });
