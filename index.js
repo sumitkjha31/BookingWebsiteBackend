@@ -21,12 +21,18 @@ app.use(express.json());
 app.use(cookieParser());
 const cloudinary = require("cloudinary").v2;
 // Configuration
-cloudinary.config({
-  cloud_name: "dpmqtgwfu",
-  api_key: "668149654818296",
-  api_secret: "vjuT4Aq3igimg0BUdUvB1T_Dvdo",
-});
+// cloudinary.config({
+//   cloud_name: "dpmqtgwfu",
+//   api_key: "668149654818296",
+//   api_secret: "vjuT4Aq3igimg0BUdUvB1T_Dvdo",
+// });
 
+
+cloudinary.config({
+  cloud_name: process.env.cloud_name,
+  api_key: process.env.api_key,
+  api_secret: process.env.api_secret,
+});
 mongoose.connect(process.env.MONGO_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -134,14 +140,14 @@ app.use((err, req, res, next) => {
 app.use(
   cors({
     origin:
-      "https://645e1663f532d67a4bf17875--sparkly-marigold-270a3d.netlify.app",
+      "https://explorehotels.onrender.com",
     credentials: true,
   })
 );
 app.use((req, res, next) => {
   res.setHeader(
     "Access-Control-Allow-Origin",
-    "https://645e1663f532d67a4bf17875--sparkly-marigold-270a3d.netlify.app"
+    "https://explorehotels.onrender.com"
   );
   res.setHeader("Access-Control-Allow-Credentials", "true");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
