@@ -125,10 +125,10 @@ const PORT = process.env.PORT || 4000;
 const bcryptSalt = bcrypt.genSaltSync(10);
 const jwtSecret = "fasefraw4r5r3wq45wdfgw34twdfg";
 // Redirect all requests to 'index.html'
-app.use(history({
-  disableDotRule: true,
-  verbose: true
-}));
+// app.use(history({
+//   disableDotRule: true,
+//   verbose: true
+// }));
 
 app.use("/uploads", express.static(__dirname + "/uploads"));
 // Import the error handling middleware
