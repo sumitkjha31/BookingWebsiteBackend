@@ -32,6 +32,11 @@ mongoose.connect(process.env.MONGO_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
+if(process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+  app.get("/*", function(req, res) {
+      res.sendFile(path.join(__dirname, "./client/build/index.html"));
+    }); }
 
 // const connection = mongoose.connection;
 // Create a GridFSBucket instance using the native MongoDB driver
