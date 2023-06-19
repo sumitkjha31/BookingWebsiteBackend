@@ -434,10 +434,22 @@ app.get("/user-places", (req, res) => {
   const token = authHeader && authHeader.split(" ")[1];
   console.log(token);
   jwt.verify(token, jwtSecret, {}, async (err, userData) => {
-     console.log(userData);
+     console.log("user",userData);
+     if (err) throw err;
     const { id } = userData;
     res.json(await Place.find({ owner: id }));
   });
+
+
+  // if (token) {
+  //   jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+      
+  //     const { name, email, _id } = await User.findById(userData.id);
+  //     res.json({ name, email, _id });
+  //   });
+  // } else {
+  //   res.json(null);
+  // }
 });
 
 app.get("/places/:id", async (req, res) => {
