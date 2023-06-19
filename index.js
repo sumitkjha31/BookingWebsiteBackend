@@ -20,18 +20,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 const cloudinary = require("cloudinary").v2;
-// Configuration
-// cloudinary.config({
-//   cloud_name: "dpmqtgwfu",
-//   api_key: "668149654818296",
-//   api_secret: "vjuT4Aq3igimg0BUdUvB1T_Dvdo",
-// });
-
-// cloudinary.config({ 
-//   cloud_name: 'dpmqtgwfu', 
-//   api_key: '668149654818296', 
-//   api_secret: 'vjuT4Aq3igimg0BUdUvB1T_Dvdo' 
-// });
 
 
 cloudinary.config({
