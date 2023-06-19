@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const history = require('express-history-api-fallback');
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("./models/User.js");
@@ -123,6 +124,11 @@ const PORT = process.env.PORT || 4000;
 
 const bcryptSalt = bcrypt.genSaltSync(10);
 const jwtSecret = "fasefraw4r5r3wq45wdfgw34twdfg";
+// Redirect all requests to 'index.html'
+app.use(history({
+  disableDotRule: true,
+  verbose: true
+}));
 
 app.use("/uploads", express.static(__dirname + "/uploads"));
 // Import the error handling middleware
@@ -385,7 +391,7 @@ app.post("/places", async (req, res, next) => {
   try {
     const authHeader = req.headers["authorization"];
     const token = authHeader && authHeader.split(" ")[1];
-
+    console.log(token)
     console.log("token", token);
     const {
       title,
