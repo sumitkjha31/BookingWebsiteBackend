@@ -141,14 +141,14 @@ app.use((err, req, res, next) => {
 app.use(
   cors({
     origin:
-      "https://explorehotels.onrender.com",
+      "https://64901a0978649d4185a5bb85--astonishing-kleicha-4f781b.netlify.app",
     credentials: true,
   })
 );
 app.use((req, res, next) => {
   res.setHeader(
     "Access-Control-Allow-Origin",
-    "https://explorehotels.onrender.com"
+    "https://64901a0978649d4185a5bb85--astonishing-kleicha-4f781b.netlify.app"
   );
   res.setHeader("Access-Control-Allow-Credentials", "true");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
@@ -514,8 +514,8 @@ app.get("/bookings", async (req, res) => {
   res.json(await Booking.find({ user: userData.id }).populate("place"));
 });
 
-// Catch-all route handler
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'BookingWebsiteFrontend', 'index.html'));
-});
+// // Catch-all route handler
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(__dirname, 'BookingWebsiteFrontend', 'index.html'));
+// });
 app.listen(PORT);
