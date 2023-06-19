@@ -21,18 +21,18 @@ app.use(express.json());
 app.use(cookieParser());
 const cloudinary = require("cloudinary").v2;
 // Configuration
-// cloudinary.config({
-//   cloud_name: "dpmqtgwfu",
-//   api_key: "668149654818296",
-//   api_secret: "vjuT4Aq3igimg0BUdUvB1T_Dvdo",
-// });
-
-
 cloudinary.config({
-  cloud_name: process.env.cloud_name,
-  api_key: process.env.api_key,
-  api_secret: process.env.api_secret,
+  cloud_name: "dpmqtgwfu",
+  api_key: "668149654818296",
+  api_secret: "vjuT4Aq3igimg0BUdUvB1T_Dvdo",
 });
+
+
+// cloudinary.config({
+//   cloud_name: process.env.cloud_name,
+//   api_key: process.env.api_key,
+//   api_secret: process.env.api_secret,
+// });
 mongoose.connect(process.env.MONGO_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
