@@ -140,15 +140,18 @@ app.use((err, req, res, next) => {
 
 app.use(
   cors({
-    origin:
+    origin: [
       "https://explorehotel.netlify.app",
+      "https://649282505fc3a21247605663--teal-mousse-f5d401.netlify.app"
+    ],
     credentials: true,
   })
 );
 app.use((req, res, next) => {
   res.setHeader(
     "Access-Control-Allow-Origin",
-    "https://explorehotel.netlify.app"
+    "https://explorehotel.netlify.app",
+    "https://649282505fc3a21247605663--teal-mousse-f5d401.netlify.app"
   );
   res.setHeader("Access-Control-Allow-Credentials", "true");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
